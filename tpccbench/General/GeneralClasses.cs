@@ -89,7 +89,7 @@ namespace CommonClasses
             MaxRunTimeMin = 1;
             NumClients = 1;
             MaxThreads = "";
-            Trusted = "true";
+            Trusted = "false";
             Password = "";
             UserName = "";
             DatabaseName = "TPCCDB";
