@@ -42,7 +42,7 @@ namespace TPC.C
                 query = "exec CREATE_NEW_ORDER NULL,1,'OL_NUM_1'," + Globals.WH + "," + autoNumber + ";";
                 try
                 {
-                    _objCommand = new SqlCommand(query, objConnect) {CommandTimeout = 3600,CommandType = CommandType.Text};
+                    _objCommand = new SqlCommand(query, objConnect) { CommandTimeout = 3600, CommandType = CommandType.Text };
                     _objCommand.ExecuteNonQuery();
                 }
                 catch (Exception e)
@@ -109,7 +109,7 @@ namespace TPC.C
 
                 try
                 {
-                    _objCommand = new SqlCommand(query, objConnect) {CommandTimeout = 3600};
+                    _objCommand = new SqlCommand(query, objConnect) { CommandTimeout = 3600 };
                     result = _objCommand.ExecuteReader();
 
                     while (result.Read())
@@ -187,7 +187,7 @@ namespace TPC.C
                 //Console.WriteLine(_query);
                 try
                 {
-                    _objCommand = new SqlCommand(query, objConnect) {CommandTimeout = 3600};
+                    _objCommand = new SqlCommand(query, objConnect) { CommandTimeout = 3600 };
                     result = _objCommand.ExecuteReader();
 
                     while (result.Read())
@@ -219,7 +219,7 @@ namespace TPC.C
                         "AND	D_ID  = '" + vdId + "' \r\n";
                 try
                 {
-                    _objCommand = new SqlCommand(query, objConnect) {CommandTimeout = 3600};
+                    _objCommand = new SqlCommand(query, objConnect) { CommandTimeout = 3600 };
                     result = _objCommand.ExecuteReader();
 
                     while (result.Read())
@@ -318,7 +318,7 @@ namespace TPC.C
                 //Console.WriteLine(_query);
                 try
                 {
-                    _objCommand = new SqlCommand(query, objConnect) {CommandTimeout = 3600};
+                    _objCommand = new SqlCommand(query, objConnect) { CommandTimeout = 3600 };
                     result = _objCommand.ExecuteReader();
 
                     while (result.Read())
@@ -346,7 +346,7 @@ namespace TPC.C
                 //Console.WriteLine(_query);
                 try
                 {
-                    _objCommand = new SqlCommand(query, objConnect) {CommandTimeout = 3600};
+                    _objCommand = new SqlCommand(query, objConnect) { CommandTimeout = 3600 };
                     result = _objCommand.ExecuteReader();
 
                     while (result.Read())
@@ -493,7 +493,7 @@ namespace TPC.C
                 //Console.WriteLine(_query);
                 try
                 {
-                    objCommand = new SqlCommand(query, objConnect) {CommandTimeout = 3600};
+                    objCommand = new SqlCommand(query, objConnect) { CommandTimeout = 3600 };
                     result = objCommand.ExecuteReader();
 
                     while (result.Read())
@@ -532,7 +532,7 @@ namespace TPC.C
                 //Console.WriteLine(_query);
                 try
                 {
-                    objCommand = new SqlCommand(query, objConnect) {CommandTimeout = 3600};
+                    objCommand = new SqlCommand(query, objConnect) { CommandTimeout = 3600 };
                     result = objCommand.ExecuteReader();
 
 
@@ -569,7 +569,7 @@ namespace TPC.C
                 //Console.WriteLine(_query);
                 try
                 {
-                    objCommand = new SqlCommand(query, objConnect) {CommandTimeout = 3600};
+                    objCommand = new SqlCommand(query, objConnect) { CommandTimeout = 3600 };
                     result = objCommand.ExecuteReader();
 
 
@@ -764,7 +764,7 @@ namespace TPC.C
                         "AND	C_ID  = '" + vcId + "' \r\n";
                 try
                 {
-                    objCommand = new SqlCommand(query, objConnect) {CommandTimeout = 3600};
+                    objCommand = new SqlCommand(query, objConnect) { CommandTimeout = 3600 };
                     result = objCommand.ExecuteReader();
 
 
@@ -855,7 +855,7 @@ namespace TPC.C
                         "AND	D_ID  =  '" + vdId + "' \r\n";
                 try
                 {
-                    objCommand = new SqlCommand(query, objConnect) {CommandTimeout = 3600};
+                    objCommand = new SqlCommand(query, objConnect) { CommandTimeout = 3600 };
                     result = objCommand.ExecuteReader();
 
 
@@ -914,7 +914,7 @@ namespace TPC.C
                 //Console.WriteLine(_query);                               
                 try
                 {
-                    objCommand = new SqlCommand(query, objConnect) {CommandTimeout = 3600};
+                    objCommand = new SqlCommand(query, objConnect) { CommandTimeout = 3600 };
                     result = objCommand.ExecuteReader();
 
 
@@ -1106,20 +1106,20 @@ namespace TPC.C
                                 voCId = result2["O_C_ID"].ToString();
                                 voCarrierId = result2["O_CARRIER_ID"].ToString();
                             }
-                                result2.Close();
-                                result2.Dispose();
+                            result2.Close();
+                            result2.Dispose();
                         }
                         catch (Exception e)
                         {
-                                result.Close();
-                                result.Dispose();
-                                
+                            result.Close();
+                            result.Dispose();
+
 
                             if (result2 != null)
                             {
                                 result2.Close();
                                 result2.Dispose();
-                                
+
                             }
 
                             Errhandle.StopProcessing(e, query);
@@ -1164,27 +1164,27 @@ namespace TPC.C
                                 //Console.WriteLine(_query);
                             }
 
-                                result3.Close();
-                                
+                            result3.Close();
+
                         }
                         catch (Exception e)
                         {
-                                result.Close();
-                                result.Dispose();
-                                
+                            result.Close();
+                            result.Dispose();
+
 
                             if (result2 != null)
                             {
                                 result2.Close();
                                 result2.Dispose();
-                                
+
                             }
 
                             if (result3 != null)
                             {
                                 result3.Close();
                                 result3.Dispose();
-                                
+
                             }
                             Errhandle.StopProcessing(e, query);
                         }
@@ -1196,22 +1196,22 @@ namespace TPC.C
                         }
                         catch (Exception e)
                         {
-                                result.Close();
-                                result.Dispose();
-                                
+                            result.Close();
+                            result.Dispose();
+
 
                             if (result2 != null)
                             {
                                 result2.Close();
                                 result2.Dispose();
-                                
+
                             }
 
                             if (result3 != null)
                             {
                                 result3.Close();
                                 result3.Dispose();
-                                
+
                             }
                             Errhandle.StopProcessing(e, query);
                         }
@@ -1251,59 +1251,59 @@ namespace TPC.C
                                 }
                             }
 
-                                result4.Close();
-                                
+                            result4.Close();
+
                         }
                         catch (Exception e)
                         {
-                                result.Close();
-                                result.Dispose();
-                                
+                            result.Close();
+                            result.Dispose();
+
 
                             if (result2 != null)
                             {
                                 result2.Close();
                                 result2.Dispose();
-                                
+
                             }
 
                             if (result3 != null)
                             {
                                 result3.Close();
                                 result3.Dispose();
-                                
+
                             }
                             if (result4 != null)
                             {
                                 result4.Close();
                                 result4.Dispose();
-                                
+
                             }
                             Errhandle.StopProcessing(e, query);
                         }
                     }
-                        result.Close();
-                        result.Dispose();
-                        
+                    result.Close();
+                    result.Dispose();
+
 
                     if (result2 != null)
                     {
                         result2.Close();
                         result2.Dispose();
-                        
+
                     }
 
                     if (result3 != null)
                     {
                         result3.Close();
                         result3.Dispose();
-                        
+
                     }
                     if (result4 != null)
                     {
                         result4.Close();
                         result4.Dispose();
-                        
+
                     }
                 }
                 catch (Exception e)
@@ -1312,27 +1312,27 @@ namespace TPC.C
                     {
                         result.Close();
                         result.Dispose();
-                        
+
                     }
 
                     if (result2 != null)
                     {
                         result2.Close();
                         result2.Dispose();
-                        
+
                     }
 
                     if (result3 != null)
                     {
                         result3.Close();
                         result3.Dispose();
-                        
+
                     }
                     if (result4 != null)
                     {
                         result4.Close();
                         result4.Dispose();
-                        
+
                     }
                     Errhandle.StopProcessing(e, query);
                 }
@@ -1427,7 +1427,7 @@ namespace TPC.C
                 //Console.WriteLine(_query);                            
                 try
                 {
-                    objCommand = new SqlCommand(query, objConnect) {CommandTimeout = 3600};
+                    objCommand = new SqlCommand(query, objConnect) { CommandTimeout = 3600 };
                     result = objCommand.ExecuteReader();
 
 
@@ -1461,7 +1461,7 @@ namespace TPC.C
                 //Console.WriteLine(_query);
                 try
                 {
-                    objCommand = new SqlCommand(query, objConnect) {CommandTimeout = 3600};
+                    objCommand = new SqlCommand(query, objConnect) { CommandTimeout = 3600 };
                     result = objCommand.ExecuteReader();
 
 
@@ -1510,109 +1510,60 @@ namespace TPC.C
             int sl = 0;
 #pragma warning restore 219
 
-            int min = Clientid*1000000;
+            int min = Clientid * 1000000;
 
             DateTime currdate = DateTime.Now;
             DateTime targetdate = currdate + new TimeSpan(0, Globals.MaxRunTimeMin, 0);
 
             int sleep = Globals.ClientSleepSec;
 
-            if (Globals.NumLoops == 0)
+            Globals.NumLoops = (Globals.NumLoops == 0) ? int.MaxValue : Globals.NumLoops;
+
+            while ((cnt < Globals.NumLoops) && (currdate < targetdate))
             {
-                while (currdate < targetdate)
+                if (Globals.RawWrite == 1)
                 {
-                    if (Globals.RawWrite == 1)
-                    {
-                        RawWrites();
-                    }
-                    else
-                    {
-                        i = Random.Next(1, 100);
-                        //Console.WriteLine(i);
-                        if (i <= Globals.PNO)
-                        {
-                            NewOrder(min); //45
-                            no++;
-                        }
-                        else if ((i > Globals.PNO) && (i <= (Globals.PNO + Globals.POS)))
-                        {
-                            OrderStatus(); //43
-                            os++;
-                        }
-                        else if ((i > (Globals.PNO + Globals.POS)) && (i <= (Globals.PNO + Globals.POS + Globals.PP)))
-                        {
-                            Payment(); //4
-                            p++;
-                        }
-                        else if ((i > (Globals.PNO + Globals.POS + Globals.PP)) &&
-                                 (i <= (Globals.PNO + Globals.POS + Globals.PP + Globals.PD)))
-                        {
-                            Delivery(); //4
-                            d++;
-                        }
-                        else if ((i > (Globals.PNO + Globals.POS + Globals.PP + Globals.PD)) &&
-                                 (i <= (Globals.PNO + Globals.POS + Globals.PP + Globals.PD + Globals.PSL)))
-                        {
-                            StockLevel(); //4
-                            sl++;
-                        }
-                        min++;
-                    }
-                    if (sleep != 0)
-                    {
-                        Thread.Sleep(sleep);
-                    }
-                    currdate = DateTime.Now;
-                    cnt++;
+                    RawWrites();
                 }
-            }
-            else
-            {
-                while (cnt < Globals.NumLoops)
+                else
                 {
-                    if (Globals.RawWrite == 1)
+                    i = Random.Next(1, 100);
+                    //Console.WriteLine(i);
+                    if (i <= Globals.PNO)
                     {
-                        RawWrites();
+                        NewOrder(min); //45
+                        no++;
                     }
-                    else
+                    else if ((i > Globals.PNO) && (i <= (Globals.PNO + Globals.POS)))
                     {
-                        i = Random.Next(1, 100);
-                        //Console.WriteLine(i);
-                        if (i <= Globals.PNO)
-                        {
-                            NewOrder(min); //45
-                            no++;
-                        }
-                        else if ((i > Globals.PNO) && (i <= (Globals.PNO + Globals.POS)))
-                        {
-                            OrderStatus(); //43
-                            os++;
-                        }
-                        else if ((i > (Globals.PNO + Globals.POS)) && (i <= (Globals.PNO + Globals.POS + Globals.PP)))
-                        {
-                            Payment(); //4
-                            p++;
-                        }
-                        else if ((i > (Globals.PNO + Globals.POS + Globals.PP)) &&
-                                 (i <= (Globals.PNO + Globals.POS + Globals.PP + Globals.PD)))
-                        {
-                            Delivery(); //4
-                            d++;
-                        }
-                        else if ((i > (Globals.PNO + Globals.POS + Globals.PP + Globals.PD)) &&
-                                 (i <= (Globals.PNO + Globals.POS + Globals.PP + Globals.PD + Globals.PSL)))
-                        {
-                            StockLevel(); //4
-                            sl++;
-                        }
-                        min++;
+                        OrderStatus(); //43
+                        os++;
                     }
-                    if (sleep != 0)
+                    else if ((i > (Globals.PNO + Globals.POS)) && (i <= (Globals.PNO + Globals.POS + Globals.PP)))
                     {
-                        Thread.Sleep(sleep);
+                        Payment(); //4
+                        p++;
                     }
-                    cnt++;
+                    else if ((i > (Globals.PNO + Globals.POS + Globals.PP)) &&
+                             (i <= (Globals.PNO + Globals.POS + Globals.PP + Globals.PD)))
+                    {
+                        Delivery(); //4
+                        d++;
+                    }
+                    else if ((i > (Globals.PNO + Globals.POS + Globals.PP + Globals.PD)) &&
+                             (i <= (Globals.PNO + Globals.POS + Globals.PP + Globals.PD + Globals.PSL)))
+                    {
+                        StockLevel(); //4
+                        sl++;
+                    }
+                    min++;
                 }
+                if (sleep != 0)
+                {
+                    Thread.Sleep(sleep);
+                }
+                currdate = DateTime.Now;
+                cnt++;
             }
             lock (Globals.ThisLock)
             {
