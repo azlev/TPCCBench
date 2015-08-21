@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
+using SharpNeat.Utility;
 
 namespace CommonClasses
 {
@@ -75,6 +76,8 @@ namespace CommonClasses
     internal static class Globals
     {
         public static readonly Object ThisLock = new Object();
+
+        private static FastRandom Random = new FastRandom();
 
         static Globals()
         {
@@ -155,6 +158,12 @@ namespace CommonClasses
         public static int PSL { get; set; }
 
         public static int WH { get; set; }
+
+        public static int RandomWH()
+        {
+            int ret = Random.Next(0, Globals.WH);
+            return ret + 1;
+        }
 
         public static int ClientSleepSec { get; set; }
 

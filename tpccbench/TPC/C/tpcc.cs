@@ -34,7 +34,8 @@ namespace TPC.C
                     int autoNumber = inseq;
                     if (Globals.StoredProc)
                     {
-                        query = "exec CREATE_NEW_ORDER NULL,1,'OL_NUM_1'," + Globals.WH + "," + autoNumber + ";";
+                        int vw = Globals.RandomWH();
+                        query = "exec CREATE_NEW_ORDER NULL,1,'OL_NUM_1'," +vw + "," + autoNumber + ";";
                         try
                         {
                             _objCommand = new SqlCommand(query, objConnect) { CommandTimeout = 3600, CommandType = CommandType.Text };
@@ -60,7 +61,7 @@ namespace TPC.C
                         int vnewordId = Random.Next(minValue, maxValue);
                         int voordId = Random.Next(minValue, maxValue);
                         int vordlineId = Random.Next(minValue, maxValue);
-                        int vrwId = Random.Next(1, Globals.WH);
+                        int vrwId = Globals.RandomWH();
                         string vwId = "W_" + Convert.ToString(vrwId);
                         maxValue = 11;
                         minValue = 1;
@@ -375,7 +376,7 @@ namespace TPC.C
             string query;
             SqlCommand objCommand;
             SqlDataReader result = null;
-            int rw = Random.Next(1, Globals.WH);
+            int rw = Globals.RandomWH();
             int rd = Random.Next(11);
             int rc = Random.Next(3001);
             //int ram = Random.Next(1000);
@@ -383,10 +384,6 @@ namespace TPC.C
 
             string voId = null;
 
-            if (rw == 0)
-            {
-                rw = 1;
-            }
             if (rd == 0)
             {
                 rd = 1;
@@ -527,7 +524,7 @@ namespace TPC.C
             SqlCommand objCommand;
             SqlDataReader result = null;
 
-            int rw = Random.Next(1, Globals.WH);
+            int rw = Globals.RandomWH();
             int rd = Random.Next(11);
             int rc = Random.Next(3001);
             int ram = Random.Next(1000);
@@ -552,11 +549,7 @@ namespace TPC.C
             string vwName = null;
             string vdName = null;
             const string vhisId = null;
-
-            if (rw == 0)
-            {
-                rw = 1;
-            }
+            
             if (rd == 0)
             {
                 rd = 1;
@@ -832,13 +825,9 @@ namespace TPC.C
             string query;
             var objConnect = new SqlConnection(Globals.StrPublisherConn);
             SqlCommand objCommand;
-            int rw = Random.Next(1, Globals.WH);
+            int rw = Globals.RandomWH();
             int rd = Random.Next(11);
-
-            if (rw == 0)
-            {
-                rw = 1;
-            }
+            
             if (rd == 0)
             {
                 rd = 1;
@@ -1046,14 +1035,10 @@ namespace TPC.C
             
             SqlCommand objCommand;
             SqlDataReader result = null;
-            int rw = Random.Next(1, Globals.WH);
+            int rw = Globals.RandomWH();
             int rd = Random.Next(11);
             int vdNextOId = 0;
-
-            if (rw == 0)
-            {
-                rw = 1;
-            }
+            
             if (rd == 0)
             {
                 rd = 1;
