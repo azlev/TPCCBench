@@ -78,7 +78,6 @@
     <Content Include="tpccbench\tpccbench.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="tpccbench\DataAccess\GeneralDataAccess.cs" />
     <Compile Include="tpccbench\FastRandom.cs" />
     <Compile Include="tpccbench\General\GeneralClasses.cs" />
     <Compile Include="tpccbench\General\LoadGlobals.cs" />

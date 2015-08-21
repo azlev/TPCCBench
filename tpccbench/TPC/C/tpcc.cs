@@ -3,7 +3,6 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Threading;
 using CommonClasses;
-using DataAccess;
 using SharpNeat.Utility;
 using System.Collections.Generic;
 

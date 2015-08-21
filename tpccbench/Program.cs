@@ -5,11 +5,11 @@ using System.IO;
 using System.Threading;
 using Amib.Threading;
 using CommonClasses;
-using DataAccess;
 using TPC;
 using TPC.C;
 using NDesk.Options;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 
 #endregion
 
@@ -113,11 +113,18 @@ namespace tpccbench
                 //Console.WriteLine(query);
                 try
                 {
-                    //Globals.SQLVersion = 
-                    ClientDataAccess.RunProc(Globals.StrPublisherConn, query);
+                    using (var conn = new SqlConnection(Globals.StrPublisherConn))
+                    {
+                        conn.Open();
+                        using (var comm = new SqlCommand(query, conn))
+                        {
+                            comm.ExecuteNonQuery();
+                        }
+                    }
                 }
-                catch
+                catch (Exception e)
                 {
+                    Console.WriteLine(e.Message);
                     Console.WriteLine("Unable to connect to database, correct and retry");
                     PLOG.Write("Unable to connect to database, correct and retry", 1);
                     Thread.Sleep(1000);
