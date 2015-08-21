@@ -60,7 +60,7 @@ namespace TPC.C
                         int vnewordId = Random.Next(minValue, maxValue);
                         int voordId = Random.Next(minValue, maxValue);
                         int vordlineId = Random.Next(minValue, maxValue);
-                        float vrwId = Random.Next(1, Globals.WH);
+                        int vrwId = Random.Next(1, Globals.WH);
                         string vwId = "W_" + Convert.ToString(vrwId);
                         maxValue = 11;
                         minValue = 1;
