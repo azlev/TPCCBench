@@ -596,57 +596,6 @@ namespace TPC.C
                     }
                     else
                     {
-                        //why is this block of code even here???
-                        //I can't find a use for it in the origional code ether
-                        /*
-                        _query = "SELECT C_ID \r\n"+
-                        "FROM  CUSTOMER  \r\n"+
-                        "WHERE	 C_W_ID  = " + VW_ID + " \r\n"+
-                        "AND	C_D_ID  = " + VD_ID + " \r\n"+
-                        "AND	C_LAST  = " + VC_LAST +" \r\n"+
-                        "ORDER BY C_W_ID, \r\n"+
-                         "C_D_ID, \r\n"+
-                         "C_LAST, \r\n"+
-                         "C_FIRST  \r\n";
-                        try
-                        {
-                            _result = ClientResults.GetDataReader(Globals.StrPublisherConn, _query);
-
-                            while (_result.Read())
-                            {
-                                VCUS_ID  = 1;
-                                VDIS_ID  = 100001; 
-                                VWAR_ID  = 1;
-                                VHIS_ID  = 1;
-
-                                if ( VC_ID == "0")
-                                {
-                                    _query = "SELECT COUNT(C_ID) \r\n"+
-                                        "FROM  CUSTOMER  \r\n"+
-                                        "WHERE	 C_LAST  = " + VC_LAST + " \r\n"+
-                                        "AND	C_D_ID  = " + VD_ID + " \r\n"+
-                                        "AND	C_W_ID  = " + VW_ID + " \r\n";
-                                    //NAMECNT need another reader to pull this count but didnt' see the need to code it up yet. 
-                                }
-                            }
-                            if (_result != null)
-                            {
-                                _result.Close();
-
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            if (_result != null)
-                            {
-                                _result.Close();
-
-                            }
-                            errh.StopProcessing(e,_query);;
-                        }
-                        */
-
-
                         query = "SELECT  \r\n" +
                                 "C_FIRST,  \r\n" +
                                 "C_MIDDLE,  \r\n" +
@@ -1271,8 +1220,6 @@ namespace TPC.C
 
         private static String RandomString(int strMin, int strMax)
         {
-            //Random Random = new Random();
-
             const string randHold = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
             string randomString = "";
             for (int x = 0; x < Random.Next(strMin, strMax); ++x)
