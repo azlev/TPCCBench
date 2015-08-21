@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
+using SharpNeat.Utility;
 
 namespace CommonClasses
 {
@@ -76,6 +77,8 @@ namespace CommonClasses
     {
         public static readonly Object ThisLock = new Object();
 
+        private static FastRandom Random = new FastRandom();
+
         static Globals()
         {
             BenchType = "c";
@@ -89,16 +92,12 @@ namespace CommonClasses
             MaxRunTimeMin = 1;
             NumClients = 1;
             MaxThreads = "";
-            Trusted = "false";
-            Password = "";
-            UserName = "";
-            DatabaseName = "TPCCDB";
-            ServerName = "Planetarydb";
             StrLoggingLevel = "debug";
             StrLogPathErr = "";
             StrLogPath = "";
             StrPublisherConn = "";
             RawWrite = 0;
+            Heartbeat = false;
         Countno = 0;
         TotalCount = 0;
         Countos = 0;
@@ -121,16 +120,6 @@ namespace CommonClasses
 // ReSharper disable UnusedAutoPropertyAccessor.Global
         public static string StrLoggingLevel { get; set; }
 // ReSharper restore UnusedAutoPropertyAccessor.Global
-
-        public static string ServerName { get; set; }
-
-        public static string DatabaseName { get; set; }
-
-        public static string UserName { get; set; }
-
-        public static string Password { get; set; }
-
-        public static string Trusted { get; set; }
 
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Global
@@ -170,15 +159,21 @@ namespace CommonClasses
 
         public static int WH { get; set; }
 
+        public static int RandomWH()
+        {
+            int ret = Random.Next(0, Globals.WH);
+            return ret + 1;
+        }
+
         public static int ClientSleepSec { get; set; }
 
         public static int NumLoops { get; set; }
 
-        public static int StoredProc { get; set; }
+        public static bool StoredProc { get; set; }
 
         public static int StaggeredLoad { get; set; }
 
-        public static int Heartbeat { get; set; }
+        public static bool Heartbeat { get; set; }
 
         public static int RawWrite { get; set; }
 

@@ -1,7 +1,7 @@
 using System;
 using System.Threading;
 using CommonClasses;
-using DataAccess;
+using System.Data.SqlClient;
 
 namespace TPC
 {
@@ -15,7 +15,14 @@ namespace TPC
                 string query = "insert into HEARTBEAT (ID) VALUES(" + i + ")";
                 try
                 {
-                    ClientDataAccess.RunProc(Globals.StrPublisherConn, query);
+                    using (var conn = new SqlConnection(Globals.StrPublisherConn))
+                    {
+                        conn.Open();
+                        using (var comm = new SqlCommand(query, conn))
+                        {
+                            comm.ExecuteNonQuery();
+                        }
+                    }
                 }
                 catch (Exception e)
                 {
