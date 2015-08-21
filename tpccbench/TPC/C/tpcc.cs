@@ -883,10 +883,6 @@ namespace TPC.C
             string query;
             var objConnect = new SqlConnection(Globals.StrPublisherConn);
             SqlCommand objCommand;
-            SqlDataReader result = null;
-            SqlDataReader result2 = null;
-            SqlDataReader result3 = null;
-            SqlDataReader result4 = null;
             int rw = Random.Next(1, Globals.WH);
             int rd = Random.Next(11);
 
@@ -939,7 +935,7 @@ namespace TPC.C
                 {
 
                     using (objCommand = new SqlCommand(query, objConnect) { CommandTimeout = 3600 })
-                    using (result = objCommand.ExecuteReader())
+                    using (var result = objCommand.ExecuteReader())
                     { 
                         while (result.Read())
                         {
@@ -975,7 +971,7 @@ namespace TPC.C
                             //Console.WriteLine(_query);
                             try
                             {
-                                using (result2 = ClientDataAccess.GetDataReader(Globals.StrPublisherConn, query))
+                                using (var result2 = ClientDataAccess.GetDataReader(Globals.StrPublisherConn, query))
                                 {
                                     while (result2.Read())
                                     {
@@ -1013,7 +1009,7 @@ namespace TPC.C
                             //Console.WriteLine(_query);
                             try
                             {
-                                using (result3 = ClientDataAccess.GetDataReader(Globals.StrPublisherConn, query))
+                                using (var result3 = ClientDataAccess.GetDataReader(Globals.StrPublisherConn, query))
                                 {
                                     while (result3.Read())
                                     {
@@ -1054,7 +1050,7 @@ namespace TPC.C
                             //Console.WriteLine(_query);
                             try
                             {
-                                using (result4 = ClientDataAccess.GetDataReader(Globals.StrPublisherConn, query))
+                                using (var result4 = ClientDataAccess.GetDataReader(Globals.StrPublisherConn, query))
                                 {
                                     while (result4.Read())
                                     {
