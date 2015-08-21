@@ -5,6 +5,7 @@ using System.Threading;
 using CommonClasses;
 using DataAccess;
 using SharpNeat.Utility;
+using System.Collections.Generic;
 
 namespace TPC.C
 {
@@ -823,8 +824,6 @@ namespace TPC.C
         private static void Delivery()
         {
             string query;
-            var objConnect = new SqlConnection(Globals.StrPublisherConn);
-            SqlCommand objCommand;
             int rw = Globals.RandomWH();
             int rd = Random.Next(11);
             
@@ -838,193 +837,211 @@ namespace TPC.C
             float volAmount = 1;
             string voCarrierId = null;
             string voCId = null;
-            try
-            {
-                objConnect.Open();
-            }
-            catch (Exception e)
-            {
 
-                Errhandle.StopProcessing(e, "");
-            }
-
-            if (Globals.StoredProc)
+            using (var objConnect = new SqlConnection(Globals.StrPublisherConn))
             {
-                query = "exec DELIVERY '" + vwId + "', '" + vdId + "';";
                 try
                 {
-                    objCommand = new SqlCommand(query, objConnect) { CommandTimeout = 3600 };
-                    objCommand.ExecuteNonQuery();
-                }
-                catch (Exception e)
-                {
-                    Errhandle.StopProcessing(e, query);
-                }
-            }
-            else
-            {
-                query = "SELECT NO_O_ID \r\n" +
-                        "FROM  NEW_ORDER  \r\n" +
-                        "WHERE	 NO_W_ID  = '" + vwId + "' \r\n" +
-                        "AND	NO_D_ID  = '" + vdId + "' \r\n" +
-                        "ORDER BY NO_O_ID DESC  \r\n";
-                //Console.WriteLine(_query);                        
-                try
-                {
+                    objConnect.Open();
 
-                    using (objCommand = new SqlCommand(query, objConnect) { CommandTimeout = 3600 })
-                    using (var result = objCommand.ExecuteReader())
-                    { 
-                        while (result.Read())
+                    if (Globals.StoredProc)
+                    {
+                        query = "exec DELIVERY '" + vwId + "', '" + vdId + "';";
+                        try
                         {
-                            //float OL_TOTAL;
-
-                            const float vordlineId = 100001;
-                            const float voordId = 100001;
-                            const int vcusId = 1;
-
-                            string vnoOId = result["NO_O_ID"].ToString();
-
-                            query = "DELETE FROM   NEW_ORDER \r\n" +
-                                    "WHERE  NO_O_ID  = '" + vnoOId + "' \r\n" +
-                                    "AND	NO_D_ID  = '" + vdId + "' \r\n" +
-                                    "AND	NO_W_ID  = '" + vwId + "' \r\n";
-                            try
-                            {
-                                objCommand = new SqlCommand(query, objConnect) { CommandTimeout = 3600 };
+                            using (var objCommand = new SqlCommand(query, objConnect) { CommandTimeout = 3600 })
                                 objCommand.ExecuteNonQuery();
-                            }
-                            catch (Exception e)
-                            {
-                                Errhandle.StopProcessing(e, query);
-                            }
-
-                            query = "SELECT \r\n" +
-                                    "O_C_ID, \r\n" +
-                                    "isnull(O_CARRIER_ID,' ') O_CARRIER_ID \r\n" +
-                                    "FROM  O_ORDER  \r\n" +
-                                    "WHERE	 O_ID  = " + vnoOId + " \r\n" +
-                                    "AND	O_D_ID  = '" + vdId + "' \r\n" +
-                                    "AND	O_W_ID  = '" + vwId + "' \r\n";
-                            //Console.WriteLine(_query);
-                            try
-                            {
-                                using (var result2 = ClientDataAccess.GetDataReader(Globals.StrPublisherConn, query))
-                                {
-                                    while (result2.Read())
-                                    {
-                                        voCId = result2["O_C_ID"].ToString();
-                                        voCarrierId = result2["O_CARRIER_ID"].ToString();
-                                    }
-                                }
-                            }
-                            catch (Exception e)
-                            {
-                                Errhandle.StopProcessing(e, query);
-                            }
-
-                            query = "UPDATE  O_ORDER \r\n" +
-                                    "SET	O_CARRIER_ID = '" + voCarrierId + "', \r\n" +
-                                    "SEQ_ID = " + Convert.ToString((voordId + 1)) + "  \r\n" +
-                                    "WHERE  O_ID  = '" + vnoOId + "'  \r\n" +
-                                    "AND	O_D_ID  = '" + vdId + "'  \r\n" +
-                                    "AND	O_W_ID  = '" + vwId + "'  \r\n";
-                            try
-                            {
-                                objCommand = new SqlCommand(query, objConnect) { CommandTimeout = 3600 };
-                                objCommand.ExecuteNonQuery();
-                            }
-                            catch (Exception e)
-                            {
-                                Errhandle.StopProcessing(e, query);
-                            }
-
-                            query = "SELECT SUM(CONVERT(FLOAT, OL_AMOUNT)) OL_AMOUNT \r\n" +
-                                    "FROM  ORDER_LINE  \r\n" +
-                                    "WHERE	 OL_O_ID  = " + vnoOId + " \r\n" +
-                                    "AND	OL_D_ID  = '" + vdId + "' \r\n" +
-                                    "AND	OL_W_ID  = '" + vwId + "' \r\n";
-                            //Console.WriteLine(_query);
-                            try
-                            {
-                                using (var result3 = ClientDataAccess.GetDataReader(Globals.StrPublisherConn, query))
-                                {
-                                    while (result3.Read())
-                                    {
-                                        volAmount = Convert.ToSingle(result3["OL_AMOUNT"].ToString());
-
-                                        query = "UPDATE  ORDER_LINE \r\n" +
-                                                "SET	OL_DELIVERY_D = getdate(), \r\n" +
-                                                "SEQ_ID = " + (vordlineId + 1) + " \r\n" +
-                                                "WHERE  OL_O_ID  = " + vnoOId + " \r\n" +
-                                                "AND	OL_D_ID  = '" + vdId + "' \r\n" +
-                                                "AND	OL_W_ID  = '" + vwId + "' \r\n";
-                                        //Console.WriteLine(_query);
-                                    }
-                                }
-                            }
-                            catch (Exception e)
-                            {
-                                Errhandle.StopProcessing(e, query);
-                            }
-
-                            try
-                            {
-                                objCommand = new SqlCommand(query, objConnect) { CommandTimeout = 3600 };
-                                objCommand.ExecuteNonQuery();
-                            }
-                            catch (Exception e)
-                            {
-                                Errhandle.StopProcessing(e, query);
-                            }
-
-                            query = "SELECT \r\n" +
-                                    "isnull(C_BALANCE,0) C_BALANCE, \r\n" +
-                                    "C_DELIVERY_CNT \r\n" +
-                                    "FROM  CUSTOMER  \r\n" +
-                                    "WHERE	 C_W_ID  = '" + vwId + "' \r\n" +
-                                    "AND	C_D_ID  = '" + vdId + "' \r\n" +
-                                    "AND	C_ID  = '" + voCId + "' \r\n";
-                            //Console.WriteLine(_query);
-                            try
-                            {
-                                using (var result4 = ClientDataAccess.GetDataReader(Globals.StrPublisherConn, query))
-                                {
-                                    while (result4.Read())
-                                    {
-                                        float vcBalance = Convert.ToSingle(result4["C_BALANCE"].ToString());
-                                        float vcDeliveryCnt = Convert.ToSingle(result4["C_DELIVERY_CNT"].ToString());
-
-                                        query = "UPDATE  CUSTOMER \r\n" +
-                                                "SET	C_BALANCE = " + Convert.ToString((vcBalance + volAmount)) + ", \r\n" +
-                                                "C_DELIVERY_CNT = " + Convert.ToString((vcDeliveryCnt + 1)) + ", \r\n" +
-                                                "SEQ_ID = " + Convert.ToString((vcusId + 1)) + " \r\n" +
-                                                "WHERE  C_ID  = '" + voCId + "' \r\n" +
-                                                "AND	C_D_ID  = '" + vdId + "' \r\n" +
-                                                "AND	C_W_ID  =  '" + vwId + "' \r\n";
-                                        try
-                                        {
-                                            objCommand = new SqlCommand(query, objConnect) { CommandTimeout = 3600 };
-                                            objCommand.ExecuteNonQuery();
-                                        }
-                                        catch (Exception e)
-                                        {
-                                            Errhandle.StopProcessing(e, query);
-                                        }
-                                    }
-                                }
-                            }
-                            catch (Exception e)
-                            {
-                                Errhandle.StopProcessing(e, query);
-                            }
                         }
-                }
-                    
+                        catch (Exception e)
+                        {
+                            Errhandle.StopProcessing(e, query);
+                        }
+                    }
+                    else
+                    {
+                        query = "SELECT NO_O_ID \r\n" +
+                                "FROM  NEW_ORDER  \r\n" +
+                                "WHERE	 NO_W_ID  = '" + vwId + "' \r\n" +
+                                "AND	NO_D_ID  = '" + vdId + "' \r\n" +
+                                "ORDER BY NO_O_ID DESC  \r\n";
+                        //Console.WriteLine(_query);                        
+                        try
+                        {
+                            List<string> orders = new List<string>();
+
+                            using (var objCommand = new SqlCommand(query, objConnect) { CommandTimeout = 3600 })
+                            using (var result = objCommand.ExecuteReader())
+                            {
+                                while (result.Read())
+                                {
+                                    orders.Add(result["NO_O_ID"].ToString());
+                                }
+                            }
+                            foreach (var vnoOId in orders)
+                            {
+                                //float OL_TOTAL;
+
+                                const float vordlineId = 100001;
+                                const float voordId = 100001;
+                                const int vcusId = 1;
+
+                                query = "DELETE FROM   NEW_ORDER \r\n" +
+                                        "WHERE  NO_O_ID  = '" + vnoOId + "' \r\n" +
+                                        "AND	NO_D_ID  = '" + vdId + "' \r\n" +
+                                        "AND	NO_W_ID  = '" + vwId + "' \r\n";
+                                try
+                                {
+                                    using (var objCommand = new SqlCommand(query, objConnect) { CommandTimeout = 3600 })
+                                        objCommand.ExecuteNonQuery();
+                                }
+                                catch (Exception e)
+                                {
+                                    Errhandle.StopProcessing(e, query);
+                                }
+
+                                query = "SELECT \r\n" +
+                                        "O_C_ID, \r\n" +
+                                        "isnull(O_CARRIER_ID,' ') O_CARRIER_ID \r\n" +
+                                        "FROM  O_ORDER  \r\n" +
+                                        "WHERE	 O_ID  = " + vnoOId + " \r\n" +
+                                        "AND	O_D_ID  = '" + vdId + "' \r\n" +
+                                        "AND	O_W_ID  = '" + vwId + "' \r\n";
+                                //Console.WriteLine(_query);
+                                try
+                                {
+                                    using (var objCommand = new SqlCommand(query, objConnect) { CommandTimeout = 3600 })
+                                    using (var result2 = objCommand.ExecuteReader())
+                                    {
+                                        while (result2.Read())
+                                        {
+                                            voCId = result2["O_C_ID"].ToString();
+                                            voCarrierId = result2["O_CARRIER_ID"].ToString();
+                                        }
+                                    }
+                                }
+                                catch (Exception e)
+                                {
+                                    Errhandle.StopProcessing(e, query);
+                                }
+
+                                query = "UPDATE  O_ORDER \r\n" +
+                                        "SET	O_CARRIER_ID = '" + voCarrierId + "', \r\n" +
+                                        "SEQ_ID = " + Convert.ToString((voordId + 1)) + "  \r\n" +
+                                        "WHERE  O_ID  = '" + vnoOId + "'  \r\n" +
+                                        "AND	O_D_ID  = '" + vdId + "'  \r\n" +
+                                        "AND	O_W_ID  = '" + vwId + "'  \r\n";
+                                try
+                                {
+                                    using (var objCommand = new SqlCommand(query, objConnect) { CommandTimeout = 3600 })
+                                        objCommand.ExecuteNonQuery();
+                                }
+                                catch (Exception e)
+                                {
+                                    Errhandle.StopProcessing(e, query);
+                                }
+
+                                query = "SELECT SUM(CONVERT(FLOAT, OL_AMOUNT)) OL_AMOUNT \r\n" +
+                                        "FROM  ORDER_LINE  \r\n" +
+                                        "WHERE	 OL_O_ID  = " + vnoOId + " \r\n" +
+                                        "AND	OL_D_ID  = '" + vdId + "' \r\n" +
+                                        "AND	OL_W_ID  = '" + vwId + "' \r\n";
+                                //Console.WriteLine(_query);
+                                try
+                                {
+                                    using (var objCommand = new SqlCommand(query, objConnect) { CommandTimeout = 3600 })
+                                    using (var result3 = objCommand.ExecuteReader())
+                                    {
+                                        while (result3.Read())
+                                        {
+                                            volAmount = Convert.ToSingle(result3["OL_AMOUNT"].ToString());
+
+                                            query = "UPDATE  ORDER_LINE \r\n" +
+                                                    "SET	OL_DELIVERY_D = getdate(), \r\n" +
+                                                    "SEQ_ID = " + (vordlineId + 1) + " \r\n" +
+                                                    "WHERE  OL_O_ID  = " + vnoOId + " \r\n" +
+                                                    "AND	OL_D_ID  = '" + vdId + "' \r\n" +
+                                                    "AND	OL_W_ID  = '" + vwId + "' \r\n";
+                                            //Console.WriteLine(_query);
+                                        }
+                                    }
+                                }
+                                catch (Exception e)
+                                {
+                                    Errhandle.StopProcessing(e, query);
+                                }
+
+                                try
+                                {
+                                    using (var objCommand = new SqlCommand(query, objConnect) { CommandTimeout = 3600 })
+                                        objCommand.ExecuteNonQuery();
+                                }
+                                catch (Exception e)
+                                {
+                                    Errhandle.StopProcessing(e, query);
+                                }
+
+                                query = "SELECT \r\n" +
+                                        "isnull(C_BALANCE,0) C_BALANCE, \r\n" +
+                                        "C_DELIVERY_CNT \r\n" +
+                                        "FROM  CUSTOMER  \r\n" +
+                                        "WHERE	 C_W_ID  = '" + vwId + "' \r\n" +
+                                        "AND	C_D_ID  = '" + vdId + "' \r\n" +
+                                        "AND	C_ID  = '" + voCId + "' \r\n";
+                                //Console.WriteLine(_query);
+                                try
+                                {
+                                    List<float[]> values = new List<float[]>();
+
+                                    using (var objCommand = new SqlCommand(query, objConnect) { CommandTimeout = 3600 })
+                                    using (var result4 = objCommand.ExecuteReader())
+                                    {
+                                        while (result4.Read())
+                                        {
+                                            var v = new float[] {
+                                                Convert.ToSingle(result4["C_BALANCE"].ToString()),
+                                                Convert.ToSingle(result4["C_DELIVERY_CNT"].ToString()) };
+                                            values.Add(v);
+                                        }
+                                    }
+                                    foreach (float[] v in values)
+                                    {
+                                        float vcBalance = v[0];
+                                        float vcDeliveryCnt = v[1];
+                                            query = "UPDATE  CUSTOMER \r\n" +
+                                                    "SET	C_BALANCE = " + Convert.ToString((vcBalance + volAmount)) + ", \r\n" +
+                                                    "C_DELIVERY_CNT = " + Convert.ToString((vcDeliveryCnt + 1)) + ", \r\n" +
+                                                    "SEQ_ID = " + Convert.ToString((vcusId + 1)) + " \r\n" +
+                                                    "WHERE  C_ID  = '" + voCId + "' \r\n" +
+                                                    "AND	C_D_ID  = '" + vdId + "' \r\n" +
+                                                    "AND	C_W_ID  =  '" + vwId + "' \r\n";
+                                            try
+                                            {
+                                                using (var objCommand = new SqlCommand(query, objConnect) { CommandTimeout = 3600 })
+                                                    objCommand.ExecuteNonQuery();
+                                            }
+                                            catch (Exception e)
+                                            {
+                                                Errhandle.StopProcessing(e, query);
+                                            }
+                                     }
+                                }
+                                catch (Exception e)
+                                {
+                                    Errhandle.StopProcessing(e, query);
+                                }
+                            }
+
+                        }
+                        catch (Exception e)
+                        {
+                            Errhandle.StopProcessing(e, query);
+                        }
+                    }
                 }
                 catch (Exception e)
                 {
-                    Errhandle.StopProcessing(e, query);
+
+                    Errhandle.StopProcessing(e, "");
                 }
             }
         }
